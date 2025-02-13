@@ -13,7 +13,6 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    // 카테고리 목록 조회
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
