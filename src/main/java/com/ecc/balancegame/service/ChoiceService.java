@@ -24,8 +24,7 @@ public class ChoiceService {
                         choiceRequestDto.getUserId(),
                         choiceRequestDto.getCategoryId(),
                         selection.getQuestionId(),
-                        selection.getChoiceId(),
-                        selection.getSelectedNumber()
+                        selection.getChoiceId()
                 ))
                 .collect(Collectors.toList());
 

@@ -8,5 +8,4 @@ import lombok.Setter;
 public class SelectionDto {
     private Long questionId;
     private Long choiceId;
-    private Integer selectedNumber;
 }
