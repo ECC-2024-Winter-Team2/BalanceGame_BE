@@ -30,8 +30,4 @@ public class ChoiceService {
 
         choiceRepository.saveAll(choices); // 🟢 Batch Insert 적용
     }
-    @Transactional
-    public void deleteChoiceByQuestionId(Long questionId) {
-        choiceRepository.deleteByQuestionId(questionId);
-    }
 }

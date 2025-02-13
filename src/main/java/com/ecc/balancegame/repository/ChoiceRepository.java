@@ -7,6 +7,4 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface ChoiceRepository extends JpaRepository<Choice, Long> {
-    @Transactional
-    void deleteByQuestionId(Long questionId);
 }
