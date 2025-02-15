@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/choices")
-public class ChoiceController {
+public class
+ChoiceController {
 
     private ChoiceService choiceService;
 
