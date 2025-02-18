@@ -17,8 +17,8 @@ public class CorsConfig {
                                 "http://localhost:3003",
                                 "http://ec2-43-200-237-253.ap-northeast-2.compute.amazonaws.com"
                         ) // 허용할 도메인 추가
-                        .allowedMethods("*") // 모든 HTTP 메서드 허용
-                        .allowedHeaders("*"); // 모든 헤더 허용
+                        .allowedMethods("*")
+                        .allowedHeaders("*");
             }
         };
     }
