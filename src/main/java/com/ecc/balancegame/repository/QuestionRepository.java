@@ -11,4 +11,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query("SELECT q FROM Question q WHERE q.category.categoryId = :categoryId ORDER BY q.orderIndex ASC")
     List<Question> findByCategoryIdOrderByOrderIndex(@Param("categoryId") Long categoryId);
+
+    List<Question> findByCategoryId(Long categoryId);
+
 }
