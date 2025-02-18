@@ -16,7 +16,7 @@ public class CorsConfig {
                         .allowedOrigins(
                                 "http://localhost:3003",
                                 "http://ec2-43-200-237-253.ap-northeast-2.compute.amazonaws.com"
-                        ) 
+                        )
                         .allowedMethods("*")
                         .allowedHeaders("*");
             }
