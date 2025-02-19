@@ -1,6 +1,7 @@
 package com.ecc.balancegame.repository;
 
 import com.ecc.balancegame.domain.*;
+import com.ecc.balancegame.domain.Choice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.awt.*;

@@ -1,7 +1,8 @@
 package com.ecc.balancegame.service;
 
 import com.ecc.balancegame.domain.*;
-
+import com.ecc.balancegame.domain.Category;
+import com.ecc.balancegame.domain.SelectChoice;
 import com.ecc.balancegame.dto.*;
 import com.ecc.balancegame.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class GameService {
 
         // user가 답한 질문들만 모음
         List<Long> questionIds = userSelects.stream()
-                .map(SelectChoice::getQuestion)
+                .map(sc -> sc.getQuestion().getQuestionId()) // Question -> questionId
                 .distinct()
                 .collect(Collectors.toList());
 
@@ -96,13 +97,13 @@ public class GameService {
 
         // 3) 각 질문에 대해 선택지별로 몇 명이 골랐는지 집계
         for (Question q : questions) {
-            // (a) 이 질문을 답한 총 인원 수
-            long totalAnswers = userChoiceRepository.countByQuestionId(q.getQuestion());
+            // (a) 질문을 답한 총 인원 수
+            long totalAnswers = userChoiceRepository.countByQuestionId(q.getQuestionId());
 
-            // (b) 이 질문의 선택지 목록
+            // (b) 질문의 선택지 목록
             List<SelectChoice> choices = selectChoiceRepository.findByQuestionId(q.getQuestionId());
 
-            // (c) 각 선택지에 대해 count & percentage 계산
+            // (c) 각 선택지 count & percentage
             for (SelectChoice choice : choices) {
                 long count = userChoiceRepository.countByQuestionIdAndChoiceId(q.getQuestionId(), choice.getChoiceId());
 
@@ -120,9 +121,10 @@ public class GameService {
             }
         }
 
-        // 4) 최종 응답 DTO 구성
+        // 4) 응답 DTO
         return new CategoryResultResponse(category.getCategoryName(), resultList);
     }
+
     @Transactional(readOnly = true)
     public AllGameResultsResponse getAllGameResults() {
         // 1) 모든 질문 조회
@@ -136,7 +138,7 @@ public class GameService {
             long totalAnswers = userChoiceRepository.countByQuestionId(question.getQuestionId());
 
             // (b) 이 질문에 달린 모든 선택지 조회
-            List<SelectChoice> choices = selectChoiceRepository.findByQuestion(question.getQuestion());
+            List<SelectChoice> choices = selectChoiceRepository.findByQuestionId(question.getQuestionId());
 
             // (c) 선택지별 vote, percentage 계산
             List<ChoiceResultDto> choiceResultList = new ArrayList<>();

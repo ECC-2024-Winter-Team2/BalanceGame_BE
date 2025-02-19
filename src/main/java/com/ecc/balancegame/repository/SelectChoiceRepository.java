@@ -26,6 +26,7 @@ public interface SelectChoiceRepository extends JpaRepository<SelectChoice, Long
 
         // 특정 보기(Choice)가 몇 번 선택되었는지
         long countByChoiceId(Long choiceId);
+    List<SelectChoice> findByQuestionId(Long questionId);
 
 
 }
