@@ -10,7 +10,6 @@ import com.ecc.balancegame.repository.CommentRepository;
 import com.ecc.balancegame.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,7 +52,8 @@ public class CommentService {
         List<CommentResponseDto> commentDtos = comments.stream()
                 .map(c -> new CommentResponseDto(
                         c.getUser().getUserName(),   // username
-                        c.getContent(),             // content
+                        c.getContent(),
+                        c.isAnonymous(),// content
                         c.getCreatedAt(),           // createdAt
                         c.getLikes()                // likes
                 ))
