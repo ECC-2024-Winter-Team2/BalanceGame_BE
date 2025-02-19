@@ -1,7 +1,6 @@
 package com.ecc.balancegame.controller;
 
 import com.ecc.balancegame.dto.CategoryQuestionCommentsResponse;
-import com.ecc.balancegame.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
