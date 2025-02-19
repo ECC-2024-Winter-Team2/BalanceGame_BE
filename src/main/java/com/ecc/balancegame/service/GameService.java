@@ -1,7 +1,7 @@
 package com.ecc.balancegame.service;
 
-import com.ecc.balancegame.domain.Category;
-import com.ecc.balancegame.domain.SelectChoice;
+import com.ecc.balancegame.domain.*;
+
 import com.ecc.balancegame.dto.*;
 import com.ecc.balancegame.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class GameService {
 
         // user가 답한 질문들만 모음
         List<Long> questionIds = userSelects.stream()
-                .map(SelectChoice::getQuestionId)
+                .map(SelectChoice::getQuestion)
                 .distinct()
                 .collect(Collectors.toList());
 
@@ -59,7 +59,7 @@ public class GameService {
 
             // (d) user가 이 질문에서 선택한 choiceId
             Long userChoiceId = userSelects.stream()
-                    .filter(sc -> sc.getQuestionId().equals(qId))
+                    .filter(sc -> sc.getQuestion().equals(qId))
                     .map(SelectChoice::getChoiceId)
                     .findFirst()
                     .orElse(null);
@@ -97,7 +97,7 @@ public class GameService {
         // 3) 각 질문에 대해 선택지별로 몇 명이 골랐는지 집계
         for (Question q : questions) {
             // (a) 이 질문을 답한 총 인원 수
-            long totalAnswers = userChoiceRepository.countByQuestionId(q.getQuestionId());
+            long totalAnswers = userChoiceRepository.countByQuestionId(q.getQuestion());
 
             // (b) 이 질문의 선택지 목록
             List<SelectChoice> choices = selectChoiceRepository.findByQuestionId(q.getQuestionId());
@@ -136,7 +136,7 @@ public class GameService {
             long totalAnswers = userChoiceRepository.countByQuestionId(question.getQuestionId());
 
             // (b) 이 질문에 달린 모든 선택지 조회
-            List<SelectChoice> choices = selectChoiceRepository.findByQuestionId(question.getQuestionId());
+            List<SelectChoice> choices = selectChoiceRepository.findByQuestion(question.getQuestion());
 
             // (c) 선택지별 vote, percentage 계산
             List<ChoiceResultDto> choiceResultList = new ArrayList<>();
