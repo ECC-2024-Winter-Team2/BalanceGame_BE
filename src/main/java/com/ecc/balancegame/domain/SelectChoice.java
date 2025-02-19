@@ -25,5 +25,5 @@ public class SelectChoice {
     private Integer choiceNumber;
 
     @Column(nullable = false, name = "choice_text")
-    private String selectedText;
+    private String choiceText;
 }

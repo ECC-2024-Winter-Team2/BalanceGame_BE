@@ -39,7 +39,7 @@ public class QuestionService {
                     choices.stream().map(choice -> new ChoiceResponseDto(
                             choice.getChoiceId(),
                             choice.getChoiceNumber(),
-                            choice.getSelectedText()
+                            choice.getChoiceText()
                     )).collect(Collectors.toList())
             );
         }).collect(Collectors.toList());
