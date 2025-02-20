@@ -1,13 +1,16 @@
 package com.ecc.balancegame.service;
 
-import com.ecc.balancegame.domain.Comment;
+import com.ecc.balancegame.domain.*;
 import com.ecc.balancegame.dto.CategoryCommentsDto;
 import com.ecc.balancegame.dto.CommentResponseDto;
-import com.ecc.balancegame.repository.CommentRepository;
+import com.ecc.balancegame.dto.LikeRequestDto;
+import com.ecc.balancegame.dto.LikeResponseDto;
+import com.ecc.balancegame.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,8 +18,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CommentService {
 
+    private final QuestionRepository questionRepository;
     private final CommentRepository commentRepository;
     private final CategoryService categoryService;
+    private final CommentLikesRepository commentLikesRepository;
+    private final SelectChoiceRepository selectChoiceRepository;
+    private final UserRepository userRepository;
 
     public CategoryCommentsDto getCommentsByCategoryIdAndQuestionId(Long categoryId, Long questionId){
 
@@ -34,5 +41,51 @@ public class CommentService {
         // CategoryCommentDto 반환
         return new CategoryCommentsDto(categoryId, categoryName, commentResponseDtos);
 
+    }
+    public LikeResponseDto addLike(Long commentId, LikeRequestDto request) {
+        // 1) 사용자, 댓글 존재 여부 확인
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
+
+        // 2) 이미 좋아요를 눌렀는지 확인
+        if (commentLikesRepository.existsByCommentAndUser(comment, user)) {
+            throw new RuntimeException("이미 좋아요를 눌렀습니다.");
+        }
+
+        // 3) 좋아요 추가
+        CommentLikes commentLike = new CommentLikes(user, comment);
+        commentLikesRepository.save(commentLike);
+
+        // 4) 좋아요 개수 증가
+        comment.setLikes(comment.getLikes() + 1);
+        commentRepository.save(comment);
+
+        return new LikeResponseDto("좋아요가 추가되었습니다.", comment.getLikes());
+    }
+
+    /**
+     * 댓글 좋아요 취소
+     */
+    public LikeResponseDto removeLike(Long commentId, LikeRequestDto request) {
+        // 1) 사용자, 댓글 존재 여부 확인
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("해당 댓글이 존재하지 않습니다."));
+
+        // 2) 좋아요 기록 조회
+        CommentLikes commentLike = commentLikesRepository.findByCommentAndUser(comment, user)
+                .orElseThrow(() -> new RuntimeException("좋아요를 누른 적이 없습니다."));
+
+        // 3) 좋아요 취소
+        commentLikesRepository.delete(commentLike);
+
+        // 4) 좋아요 개수 감소
+        comment.setLikes(comment.getLikes() - 1);
+        commentRepository.save(comment);
+
+        return new LikeResponseDto("좋아요가 취소되었습니다.", comment.getLikes());
     }
 }
