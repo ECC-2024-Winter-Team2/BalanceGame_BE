@@ -16,4 +16,11 @@ public class CategoryService {
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
+
+    // 카테고리 ID에 해당하는 카테고리 이름 반환 메서드
+    public String getCategoryNameById(Long categoryId){
+        return categoryRepository.findById(categoryId)
+                .map(Category::getCategoryName)
+                .orElseThrow(()-> new IllegalArgumentException("유효하지 않은 카테고리 ID 입니다."));
+    }
 }
