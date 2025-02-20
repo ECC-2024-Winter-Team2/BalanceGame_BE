@@ -4,10 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
-public class QuestionResultDto {
-    private Long questionId;
-    private boolean isFundamental;
+public class GameResultsResponseDto {
+    private List<QuestionVoteDto> results;
 }

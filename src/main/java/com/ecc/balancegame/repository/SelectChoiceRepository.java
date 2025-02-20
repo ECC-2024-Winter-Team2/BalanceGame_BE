@@ -2,6 +2,7 @@ package com.ecc.balancegame.repository;
 
 import com.ecc.balancegame.domain.Question;
 import com.ecc.balancegame.domain.SelectChoice;
+import com.ecc.balancegame.domain.User;
 import com.ecc.balancegame.dto.ChoiceCountDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,26 +11,24 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface SelectChoiceRepository extends JpaRepository<SelectChoice, Long> {
+
     List<SelectChoice> findByQuestion(Question question);
 
-    // 1) userId로 해당 유저가 선택한 모든 기록 조회
-    List<SelectChoice> findAllByUserId(Long userId);
+    // 수정: userId 필드가 아니라 user 객체를 기반으로 검색
+    List<SelectChoice> findAllByUser(User user);
+
+    // user의 ID를 기반으로 검색 (SelectChoice 엔티티에 user 필드가 존재하는 경우)
+    List<SelectChoice> findAllByUser_UserId(Long userId);
 
     @Query("SELECT new com.ecc.balancegame.dto.ChoiceCountDto(sc.choiceId, COUNT(sc)) " +
             "FROM SelectChoice sc " +
-            "WHERE sc.questionId = :questionId " +
+            "WHERE sc.question.questionId = :questionId " +
             "GROUP BY sc.choiceId")
     List<ChoiceCountDto> countByQuestionIdGroupByChoiceId(@Param("questionId") Long questionId);
 
-        // 해당 질문에 대해, 전체 유저가 선택한 기록 수
-        long countByQuestionId(Long questionId);
+    long countByQuestion_QuestionId(Long questionId);
 
-        // 특정 보기(Choice)가 몇 번 선택되었는지
-        long countByChoiceId(Long choiceId);
-    List<SelectChoice> findByQuestionId(Long questionId);
+    long countByChoiceId(Long choiceId);
 
-
+    List<SelectChoice> findByQuestion_QuestionId(Long questionId);
 }
-
-
-

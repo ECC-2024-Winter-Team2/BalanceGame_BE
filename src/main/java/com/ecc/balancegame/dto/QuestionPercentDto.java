@@ -7,7 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class QuestionResultDto {
-    private Long questionId;
-    private boolean isFundamental;
+public class QuestionPercentDto {
+    private String questionText;
+    private String selectedChoice;
+    private double percentage;
 }

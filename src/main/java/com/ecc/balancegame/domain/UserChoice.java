@@ -23,7 +23,7 @@ public class UserChoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userChoice_id")
+    @Column(name = "selected_id")
     private Long userChoiceId;
 
     @ManyToOne

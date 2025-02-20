@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.awt.*;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -26,4 +28,8 @@ public class SelectChoice {
 
     @Column(nullable = false, name = "choice_text")
     private String selectedText;
+
+    @ManyToOne  // User 엔티티와 다대일 관계 설정
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

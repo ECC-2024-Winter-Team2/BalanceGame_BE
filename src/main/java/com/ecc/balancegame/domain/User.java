@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "user")
 public class User {
 
     @Id

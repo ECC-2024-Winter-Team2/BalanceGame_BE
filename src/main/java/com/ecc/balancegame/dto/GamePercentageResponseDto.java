@@ -1,19 +1,19 @@
 package com.ecc.balancegame.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
-@NoArgsConstructor
+/**
+ * 사용자 퍼센트 조회 결과 DTO
+ */
+@Getter
+@Setter
 @AllArgsConstructor
 public class GamePercentageResponseDto {
     private Long userId;
-    private double percentage; // 다수 선택 비율 (0 ~ 100)
-
-    // 질문별로 상세 결과를 알고 싶다면
-    private List<QuestionFundamentalDto> questions;
+    private Long categoryId;
+    private List<QuestionResultDto> result;
 }
-
