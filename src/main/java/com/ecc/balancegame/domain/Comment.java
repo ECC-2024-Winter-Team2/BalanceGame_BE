@@ -37,6 +37,14 @@ public class Comment {
     @Column(nullable = false)
     private int likes;
 
+    // 익명 여부
+    @Column(nullable = false)
+    private boolean anonymous;
+
+    //댓글 비밀번호
+    @Column(nullable = false)
+    private String password;
+
     // 작성 시각
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -46,4 +54,3 @@ public class Comment {
         this.createdAt = LocalDateTime.now();
     }
 }
-
