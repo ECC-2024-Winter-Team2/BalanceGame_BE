@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     // 특정 질문에 대한 모든 사용자 선택 조회
-
+    Optional<User> findByUserName(String userName);
     Optional<User> findByUserId(Long userId);
     boolean existsByUserName(String userName);
 }

@@ -1,37 +1,44 @@
 package com.ecc.balancegame.service;
 
 import com.ecc.balancegame.domain.User;
+import com.ecc.balancegame.dto.UserNameRequestDto;
+import com.ecc.balancegame.dto.UserNameResponseDto;
 import com.ecc.balancegame.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Transactional
-    public User createUser(String userName) {
-        // 닉네임이 비어 있는 경우 예외 처리
-        if (userName == null || userName.trim().isEmpty()) {
-            throw new IllegalArgumentException("닉네임이 비어 있습니다.");
+    /**
+     * 닉네임 저장 (새 유저 생성 또는 닉네임만 등록)
+     * - 중복된 닉네임이 있는지 검사
+     * - userName이 비어있지 않은지 검사
+     */
+    public UserNameResponseDto saveUserName(UserNameRequestDto request) {
+        // 1) 요청 검증
+        if (request.getUserName() == null || request.getUserName().trim().isEmpty()) {
+            throw new IllegalArgumentException("닉네임을 입력해야 합니다.");
         }
 
-        // 닉네임 중복 확인
-        if (userRepository.existsByUserName(userName)) {
-            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+        // 2) 닉네임 중복 검사
+        if (userRepository.findByUserName(request.getUserName()).isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
         }
 
-        // 새 User 저장
-        User user = new User();
-        user.setUserName(userName);
-        return userRepository.save(user);
-    }
-    public void deleteUser(Long userId){
-        userRepository.deleteById(userId);
+        // 3) 유저 생성
+        User user = User.builder()
+                .userName(request.getUserName())
+                .build();
+
+        userRepository.save(user);
+
+        // 4) 응답 DTO 반환
+        return new UserNameResponseDto(user.getUserId(), user.getUserName());
     }
 }
