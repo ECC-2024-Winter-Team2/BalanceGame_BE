@@ -35,6 +35,11 @@ public class CommentController {
         }
     }
 
+    @PatchMapping("/{commentId}")
+    public ResponseEntity<ResponseDto> update(@PathVariable Long commentId, @RequestBody CommentUpdateDto commentUpdateDto){
+        ResponseDto response = commentService.update(commentId, commentUpdateDto);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     @PostMapping("/{commentId}/like")
     public ResponseEntity<LikeResponseDto> addLike(
