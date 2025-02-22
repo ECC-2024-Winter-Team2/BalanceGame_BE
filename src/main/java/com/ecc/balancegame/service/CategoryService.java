@@ -17,6 +17,15 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
+    // 카테고리 ID가 존재하는지 확ㅇ니하는 메서드
+    public boolean existsById(Long categoryId){
+        try{
+            getCategoryNameById(categoryId);
+            return true;
+        }catch (IllegalArgumentException e){
+            return false;
+        }
+    }
     // 카테고리 ID에 해당하는 카테고리 이름 반환 메서드
     public String getCategoryNameById(Long categoryId){
         return categoryRepository.findById(categoryId)
