@@ -41,6 +41,12 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<ResponseDto> delete(@PathVariable Long commentId, @RequestBody CommentDeleteDto commentDeleteDto){
+        ResponseDto response = commentService.delete(commentId, commentDeleteDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+    }
+
     @PostMapping("/{commentId}/like")
     public ResponseEntity<LikeResponseDto> addLike(
             @PathVariable Long commentId,

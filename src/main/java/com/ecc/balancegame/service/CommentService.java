@@ -78,6 +78,20 @@ public class CommentService {
         return new ResponseDto("success", "댓글이 수정되었습니다.");
     }
 
+    @Transactional
+    public ResponseDto delete(Long commentId, CommentDeleteDto commentDeleteDto){
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(()->new RuntimeException("해당 댓글이 존재하지 않습니다."));
+
+        if (!comment.getPassword().equals((commentDeleteDto.getPassword()))){
+            throw new RuntimeException("비밀번호가 틀렸습니다.");
+        }
+
+        commentRepository.delete(comment);
+
+        return new ResponseDto("success", "댓글이 삭제되었습니다.");
+    }
+
     public LikeResponseDto addLike(Long commentId, LikeRequestDto request) {
         // 1) 사용자, 댓글 존재 여부 확인
         User user = userRepository.findById(request.getUserId())
