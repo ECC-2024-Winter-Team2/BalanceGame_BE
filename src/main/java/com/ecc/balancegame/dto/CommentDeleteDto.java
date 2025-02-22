@@ -8,6 +8,5 @@ import lombok.*;
 @Setter
 @ToString
 public class CommentDeleteDto {
-    private Long commentId;
     private String password;
 }
