@@ -4,11 +4,9 @@ import com.ecc.balancegame.domain.*;
 import com.ecc.balancegame.dto.*;
 import com.ecc.balancegame.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +41,7 @@ public class CommentService {
     }
 
     @Transactional
-    public ResponseDto create(CommentRequestDto commentRequestDto) {
+    public CommentCreateDto create(CommentRequestDto commentRequestDto) {
 
         Question question = questionRepository.findById(commentRequestDto.getQuestionId())
                 .orElseThrow(()-> new IllegalArgumentException("해당 질문이 존재하지 않습니다."));
@@ -59,7 +57,7 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        return new ResponseDto("success", "댓글이 작성되었습니다.");
+        return new CommentCreateDto("success", "댓글이 작성되었습니다.", comment.getCommentId());
     }
 
     @Transactional

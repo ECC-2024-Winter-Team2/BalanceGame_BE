@@ -22,15 +22,16 @@ public class CommentController {
 
     // 댓글 생성
     @PostMapping
-    public ResponseEntity<ResponseDto> create(@RequestBody CommentRequestDto commentRequestDto) {
+    public ResponseEntity<CommentCreateDto> create(@RequestBody CommentRequestDto commentRequestDto) {
         try {
-            ResponseDto response = commentService.create(commentRequestDto);
+            // 댓글 생성 후 CommentCreateDto 반환
+            CommentCreateDto response = commentService.create(commentRequestDto);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (IllegalArgumentException e) {
-            ResponseDto response = new ResponseDto("error", e.getMessage());
+            CommentCreateDto response = new CommentCreateDto("error", e.getMessage(), null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } catch (RuntimeException e) {
-            ResponseDto response = new ResponseDto("error", e.getMessage());
+            CommentCreateDto response = new CommentCreateDto("error", e.getMessage(), null);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
