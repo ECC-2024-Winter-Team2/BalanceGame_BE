@@ -1,5 +1,6 @@
 package com.ecc.balancegame.domain;
 
+import com.ecc.balancegame.dto.CommentRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -52,5 +53,22 @@ public class Comment {
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    public static Comment createComment(CommentRequestDto commentRequestDto, Question question, User user) {
+
+        if (commentRequestDto.getPassword() == null || commentRequestDto.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("패스워드를 입력해주세요.");
+        }
+
+        return Comment.builder()
+                .question(question)
+                .user(user)
+                .content(commentRequestDto.getContent())
+                .likes(0)
+                .anonymous(commentRequestDto.isAnonymous())
+                .password(commentRequestDto.getPassword())
+                .createdAt(LocalDateTime.now())
+                .build();
     }
 }

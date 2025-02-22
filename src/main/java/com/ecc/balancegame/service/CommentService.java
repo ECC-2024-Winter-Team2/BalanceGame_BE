@@ -1,14 +1,12 @@
 package com.ecc.balancegame.service;
 
 import com.ecc.balancegame.domain.*;
-import com.ecc.balancegame.dto.CategoryCommentsDto;
-import com.ecc.balancegame.dto.CommentResponseDto;
-import com.ecc.balancegame.dto.LikeRequestDto;
-import com.ecc.balancegame.dto.LikeResponseDto;
+import com.ecc.balancegame.dto.*;
 import com.ecc.balancegame.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +19,7 @@ public class CommentService {
     private final QuestionRepository questionRepository;
     private final CommentRepository commentRepository;
     private final CategoryService categoryService;
+    private final QuestionService questionService;
     private final CommentLikesRepository commentLikesRepository;
     private final SelectChoiceRepository selectChoiceRepository;
     private final UserRepository userRepository;
@@ -42,6 +41,27 @@ public class CommentService {
         return new CategoryCommentsDto(categoryId, categoryName, commentResponseDtos);
 
     }
+
+    @Transactional
+    public ResponseDto create(CommentRequestDto commentRequestDto) {
+
+        Question question = questionRepository.findById(commentRequestDto.getQuestionId())
+                .orElseThrow(()-> new IllegalArgumentException("해당 질문이 존재하지 않습니다."));
+
+        User user = userRepository.findByUserName(commentRequestDto.getUserName())
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+
+        if (commentRequestDto.getPassword() == null || commentRequestDto.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("패스워드를 입력해주세요.");
+        }
+
+        Comment comment = Comment.createComment(commentRequestDto, question, user);
+
+        commentRepository.save(comment);
+
+        return new ResponseDto("success", "댓글이 작성되었습니다.");
+    }
+
     public LikeResponseDto addLike(Long commentId, LikeRequestDto request) {
         // 1) 사용자, 댓글 존재 여부 확인
         User user = userRepository.findById(request.getUserId())
@@ -88,4 +108,6 @@ public class CommentService {
 
         return new LikeResponseDto("좋아요가 취소되었습니다.", comment.getLikes());
     }
+
+
 }
