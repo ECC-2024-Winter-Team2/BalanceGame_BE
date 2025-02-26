@@ -233,5 +233,13 @@ public class UserChoiceService {
 
         return new CategoryResultResponseDto(categoryName, results);
     }
+
+    @Transactional
+    public void resetUserChoices(Long userId) {
+        if (!userRepository.existsById(userId)){
+            throw new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.");
+        }
+        userRepository.deleteByUserId(userId);
+    }
 }
 

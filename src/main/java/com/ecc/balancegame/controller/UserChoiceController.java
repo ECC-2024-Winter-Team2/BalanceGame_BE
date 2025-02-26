@@ -1,5 +1,6 @@
 package com.ecc.balancegame.controller;
 
+import com.ecc.balancegame.dto.ResponseDto;
 import com.ecc.balancegame.dto.UserChoiceRequest;
 import com.ecc.balancegame.service.UserChoiceService;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +47,14 @@ public class UserChoiceController {
         public String getMessage() {
             return message;
         }
+    }
+
+    @DeleteMapping("/reset")
+    public ResponseEntity<?> resetUserChoices(@RequestParam Long userId){
+        if(userId == null){
+            return ResponseEntity.badRequest().body(new ResponseDto("error", "userId를 입력해주세요."));
+        }
+        userChoiceService.resetUserChoices(userId);
+        return new ResponseEntity<>(new ResponseDto("success", "모든 선택이 초기화되었습니다."),HttpStatus.OK);
     }
 }
