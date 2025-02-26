@@ -21,7 +21,7 @@ public class GameResult {
 
     // 어떤 유저의 결과인지
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     // 어떤 카테고리에 대한 결과인지
