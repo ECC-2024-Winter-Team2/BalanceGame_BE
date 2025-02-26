@@ -15,8 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,9 +73,50 @@ public class UserChoiceService {
             throw new RuntimeException("해당 유저의 선택 기록이 없습니다.");
         }
 
-        // 3) 질문별로 isFundamental 값 계산 (일단 false로 설정)
+        // 3) 질문별로 isFundamental 값 계산
         List<QuestionResultDto> result = userChoices.stream()
-                .map(choice -> new QuestionResultDto(choice.getQuestion().getQuestionId(), false))
+                .map(choice -> {
+                    Question question = choice.getQuestion();
+
+                    // 해당 질문에 대한 모든 사용자 선택 가져오기
+                    List<UserChoice> questionVotes = userChoiceRepository.findByQuestion(question);
+
+                    Set<Long> choiceIds = questionVotes.stream()
+                            .map(uc -> uc.getChoice().getChoiceId())
+                            .collect(Collectors.toSet());
+
+                    if (choiceIds.size() != 2) {
+                        throw new RuntimeException("해당 질문에는 두 개의 선택지가 있어야 합니다.");
+                    }
+
+                    Iterator<Long> iterator = choiceIds.iterator();
+                    Long optionAId = iterator.next();
+                    Long optionBId = iterator.next();
+
+                    long countOptionA = questionVotes.stream()
+                            .filter(uc -> uc.getChoice().getChoiceId().equals(optionAId))
+                            .count();
+
+                    long countOptionB = questionVotes.stream()
+                            .filter(uc -> uc.getChoice().getChoiceId().equals(optionBId))
+                            .count();
+
+                    List<Long> majorityChoices = new ArrayList<>();
+                    if (countOptionA > countOptionB) {
+                        majorityChoices.add(optionAId);
+                    } else if (countOptionB > countOptionA) {
+                        majorityChoices.add(optionBId);
+                    } else {
+                        // 개수가 같으면 둘 다 추가
+                        majorityChoices.add(optionAId);
+                        majorityChoices.add(optionBId);
+                    }
+
+                    // 사용자의 선택이 다수 선택지와 일치하는지 확인
+                    boolean isFundamental = majorityChoices.contains(choice.getChoice().getChoiceId()   );
+
+                    return new QuestionResultDto(question.getQuestionId(), isFundamental);
+                })
                 .collect(Collectors.toList());
 
         // 4) 최종 응답 DTO 반환
