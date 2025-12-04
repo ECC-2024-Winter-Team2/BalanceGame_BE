@@ -33,6 +33,11 @@ src/main/java/com/ecc/balancegame
 ├── repository      # DB 접근 계층 (JPA Repository)
 └── service         # 비즈니스 로직 처리
 ```
+## 🗂️ Database Schema (ERD)
+
+프로젝트의 데이터베이스 구조는 아래와 같습니다.
+
+![Balance Game ERD](game.png)
 
 ## ✨ 주요 기능
 
