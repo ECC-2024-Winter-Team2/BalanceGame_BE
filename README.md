@@ -1,8 +1,12 @@
 
-# ⚖️ Balance Game Backend
+# ⚖️ Balance Game Backend 
+
 
 This is the backend repository for the **ECC 2024 Winter Team 2** project.
 It is a web service where users vote on various "Balance Game" (Would You Rather) questions across different categories, view real-time results, and communicate via anonymous comments.
+
+![Balance Game ERD](infographic3.png)
+
 
 ## 📝 Project Introduction
 
@@ -141,18 +145,13 @@ Once the server is running, the API can be accessed at `http://localhost:8080`.
 
 
 
-
-
-
-
-
-
 # ⚖️ Balance Game Backend (밸런스 게임)
 
 **ECC 2024 Winter Team 2** 프로젝트의 백엔드 리포지토리입니다.
 사용자가 다양한 카테고리의 밸런스 게임(양자택일) 질문에 투표하고, 결과를 실시간으로 확인하며 익명 댓글로 소통할 수 있는 웹 서비스입니다.
 
 
+![Balance Game ERD](infographic4.png)
 ## 📝 프로젝트 소개
 
 이 프로젝트는 **"나는 근본 인간일까?"** 라는 질문에서 시작된 밸런스 게임 서비스입니다.
