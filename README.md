@@ -41,6 +41,7 @@ src/main/java/com/ecc/balancegame
 ## 🗂️ Database Schema (ERD)
 
 프로젝트의 데이터베이스 구조는 아래와 같습니다.
+![Balance Game ERD](game.png)
 
 ## ✨ 주요 기능
 
