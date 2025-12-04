@@ -1,4 +1,151 @@
 
+# ⚖️ Balance Game Backend
+
+This is the backend repository for the **ECC 2024 Winter Team 2** project.
+It is a web service where users vote on various "Balance Game" (Would You Rather) questions across different categories, view real-time results, and communicate via anonymous comments.
+
+## 📝 Project Introduction
+
+This project began with the question, **"Am I a 'Geunbon' (Mainstream/Standard) human?"**
+
+  * **Game Play**: Vote on questions in various categories such as Dating, Food, Humor, and Life.
+  * **Result Analysis**: Analyzes how much your choices align with the popular choice (the 'Standard') and provides a percentage result.
+  * **Community**: Communicate by posting anonymous comments and liking them for each question.
+
+## 🛠 Tech Stack
+
+| Category | Technology |
+| --- | --- |
+| **Language** | Java 17 |
+| **Framework** | Spring Boot 3.4.2 |
+| **Build Tool** | Gradle |
+| **Database** | MySQL |
+| **ORM** | JPA (Hibernate) |
+| **Server** | AWS EC2 (Deployment) |
+
+## 📂 Project Structure
+
+```
+src/main/java/com/ecc/balancegame
+├── config          # WebConfig (CORS settings, etc.)
+├── controller      # API Controllers (Request/Response handling)
+├── domain          # Entity Classes (DB Table Mapping)
+├── dto             # DTO (Data Transfer Object)
+├── exception       # Global Exception Handler
+├── repository      # JPA Repository (DB Access)
+└── service         # Business Logic Implementation
+```
+
+## 🗂️ Database Schema (ERD)
+
+The database structure for the project is shown below.
+
+![Balance Game ERD](game.png)
+
+## ✨ Key Features
+
+1.  **User Management**
+      * Nickname uniqueness check and user creation (LocalStorage integration).
+2.  **Game Play**
+      * Retrieve questions and options by category.
+      * Save user voting results (Batch processing for 10 questions).
+3.  **Statistics & Analysis**
+      * **"Geunbon" Test**: Calculates the alignment between your choices and the majority choices to provide a "Top n%" result.
+      * **Real-time Statistics**: Provides visualization data for selection percentages (%) by question/category.
+4.  **Comment System**
+      * Post anonymous comments by question (Password setup required).
+      * Edit/Delete comments (Password verification).
+      * Like comments (Duplicate prevention) and unlike.
+
+## 📡 API Specification (API Endpoints)
+
+### 👤 User
+
+| Method | URI | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/user/username` | Register nickname and create user |
+
+### 📂 Category & Question
+
+| Method | URI | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/categories` | Retrieve full category list |
+| `GET` | `/api/categories/{categoryId}/questions` | Retrieve questions and options for a specific category |
+
+### ✅ Choice (Voting)
+
+| Method | URI | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/choices` | Save user game selection results |
+
+### 📊 Game Result
+
+| Method | URI | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/game/{userId}` | Retrieve user's alignment result ("Geunbon" score) |
+| `GET` | `/api/game/result/{categoryId}` | Retrieve selection percentages by question for a specific category |
+| `GET` | `/api/game/results` | Retrieve statistical results for all questions |
+| `GET` | `/api/game/result` | Retrieve statistics by category name (`categoryName`) |
+
+### 💬 Comment
+
+| Method | URI | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/comments` | Retrieve comment list (Requires `categoryId`, `questionId`) |
+| `POST` | `/api/comments` | Post comment (Includes password) |
+| `PATCH` | `/api/comments/{commentId}` | Edit comment (Password verification) |
+| `DELETE` | `/api/comments/{commentId}` | Delete comment (Password verification) |
+| `POST` | `/api/comments/{commentId}/like` | Like comment |
+| `DELETE` | `/api/comments/{commentId}/like` | Cancel comment like |
+
+## 🚀 Getting Started
+
+### 1\. Prerequisites
+
+  * **Java 17** or higher
+  * **MySQL** Database
+
+### 2\. Repository Clone
+
+```bash
+git clone https://github.com/ecc-2024-winter-team2/balancegame_be.git
+cd balancegame_be
+```
+
+### 3\. Environment Variables
+
+You need to modify the settings in `src/main/resources/application.properties` to match your DB environment or inject them as environment variables during execution.
+
+  * `DB_URL`: `jdbc:mysql://localhost:3306/balancegame` (Example)
+  * `DB_USERNAME`: DB Username
+  * `DB_PASSWORD`: DB Password
+
+### 4\. Build & Run
+
+**Mac/Linux:**
+
+```bash
+./gradlew clean build
+./gradlew bootRun
+```
+
+**Windows:**
+
+```cmd
+gradlew.bat clean build
+gradlew.bat bootRun
+```
+
+Once the server is running, the API can be accessed at `http://localhost:8080`.
+
+
+
+
+
+
+
+
+
 
 # ⚖️ Balance Game Backend (밸런스 게임)
 
